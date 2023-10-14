@@ -13,7 +13,7 @@ const client = new Client({
 });
 
 client.on("ready", (c) => {
-    console.log(`✅ ${c.user?.username} is ready!!`);
+    console.log(`✅ ${c.user?.username} is ready!`);
 });
 
 client.login(process.env.DISCORD_TOKEN);
