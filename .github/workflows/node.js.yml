@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [16.6]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -38,4 +38,4 @@ jobs:
           cd /root/GenshinBot
           git pull
           npm install
-          pm2 start src/index.js
+          pm2 start npm --name "GenshinBot" -- start
