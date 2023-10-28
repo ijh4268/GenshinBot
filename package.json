@@ -7,12 +7,15 @@
   "scripts": {
     "start": "node .",
     "dev": "concurrently \"tsc -w\" \"nodemon --config nodemon.json dist/index.js\"",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "cross-env NODE_ENV=dev IS_SCRIPT=true ts-node ./dist/scripts/deploy",
+    "deploy-prod": "cross-env NODE_ENV=production npm run deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cross-env": "^7.0.3",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
