@@ -27,7 +27,7 @@ const autocomplete: AutocompleteCallback = async ({ interaction }) => {
     value: character,
   }));
   const filteredChoices = choices.filter((choice) =>
-    choice.name.toLowerCase().startsWith(focusedValue.toLowerCase())
+    choice.name.toLowerCase().includes(focusedValue.toLowerCase())
   );
   filteredChoices.length > 25
     ? await interaction.respond(filteredChoices.slice(0, 25))
