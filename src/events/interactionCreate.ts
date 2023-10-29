@@ -10,28 +10,44 @@ const allCommandsMap = new Map<string, Command>(
 export default event(
   Events.InteractionCreate,
   async ({ log, client }, interaction) => {
-    if (!interaction.isChatInputCommand()) return;
+    if (interaction.isChatInputCommand()) {
+      try {
+        const command = allCommandsMap.get(interaction.commandName);
+        if (!command) throw new Error("Command not found...");
 
-    try {
+        await command.callback({
+          interaction,
+          client,
+          log(...args) {
+            log(`[Command: ${command.meta.name}]`, ...args);
+          },
+        });
+      } catch (error) {
+        log("[Commmand Error]", error);
+
+        if (interaction.deferred)
+          return await interaction.editReply(
+            EditReply.error("Something went wrong 🙁")
+          );
+
+        return await interaction.reply(Reply.error("Something went wrong 🙁"));
+      }
+    }
+    else if (interaction.isAutocomplete()) {
       const command = allCommandsMap.get(interaction.commandName);
       if (!command) throw new Error("Command not found...");
 
-      await command.callback({
-        interaction,
-        client,
-        log(...args) {
-          log(`[Command: ${command.meta.name}]`, ...args);
-        },
-      });
-    } catch (error) {
-      log("[Commmand Error]", error);
-
-      if (interaction.deferred)
-        return await interaction.editReply(
-          EditReply.error("Something went wrong 🙁")
-        );
-
-      return await interaction.reply(Reply.error("Something went wrong 🙁"));
+      try {
+        await command.autocomplete?.({
+          interaction,
+          client,
+          log(...args) {
+            log(`[Autocomplete: ${command.meta.name}]`, ...args);
+          },
+        });
+      } catch (error) {
+        log("[Autocomplete Error]", error);
+      }
     }
   }
 );
